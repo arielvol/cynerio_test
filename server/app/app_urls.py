@@ -1,0 +1,6 @@
+URL_USER = '/api/user'
+URL_TASK = '/api/task'
+URL_USER_TASK = '/api/task/user'
+URL_TASK_REPORT = '/api/task/report'
+URL_TASK_CHECK_IN = '/api/task/checkin'
+URL_TASK_CHECK_OUT = '/api/task/checkout'
