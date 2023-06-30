@@ -1,5 +1,5 @@
 <template>
-    <div class="card mt-4 has-background-info-light">
+    <div class="card mt-4 has-background-danger-light">
         <div class="card-content">
             <div class="columns is-vcentered">
                 <div class="column">
@@ -16,7 +16,9 @@
 
 <script setup>
 import { ref, defineProps, onMounted } from 'vue'
+import { createErrorMessage } from '../utils/utils';
 import TaskService from '../services/TaskService';
+import toastr from 'toastr';
 
 const props = defineProps({
     task: {
@@ -42,7 +44,8 @@ const toggleCheckIn = async () => {
         const task = response.data.task;
         currentTask.value.status = task.status;
     } catch (error) {
-        console.error(error);
+        const msg = createErrorMessage(error);
+        toastr.error(msg, 'Error updating task status');
     }
 }
 </script>

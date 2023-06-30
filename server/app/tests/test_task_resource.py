@@ -61,7 +61,28 @@ class TaskResourceTestCase(BaseTestCase):
         self.assertEqual(data['name'], test_task_name)
         self.assertEqual(data['status'], CHECK_OUT)
 
-    def test_post_existing_task(self):
+    def test_post_task_same_task_name_different_users(self):
+
+        test_task_name = 'Test Task 1'
+        task_data_1 = {
+            'task_name': test_task_name,
+            'user_id': self.user1_id
+        }
+
+        self.client.post(URL_TASK, data=json.dumps(task_data_1), content_type='application/json')
+        task_data_2 = {
+            'task_name': test_task_name,
+            'user_id': self.user2_id
+        }
+        response = self.client.post(URL_TASK, data=json.dumps(task_data_2), content_type='application/json')
+        data = json.loads(response.data.decode())
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(data['name'], test_task_name)
+        self.assertEqual(data['status'], CHECK_OUT)
+
+
+    def test_post_task_same_task_same_user(self):
 
         existing_task_data = {
             'task_name': 'Task1',

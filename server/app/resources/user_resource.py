@@ -17,7 +17,7 @@ class UserResource(Resource):
 
         if not user_name:
             return {'message': MSG_USER_NAME_REQUIRED}, 400
-        
+
         if User.query.filter_by(name=user_name).first():
             return {'message': MSG_USER_ALREADY_EXISTS.format(user_name)}, 400
 

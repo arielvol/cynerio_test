@@ -3,13 +3,7 @@ import UserList from '../components/UserList.vue';
 </script>
 
 <template>
-  <div class="has-background-grey-dark home-view">
+  <div class="home-view">
     <UserList/>
   </div>
 </template>
-
-<style scoped>
-.home-view {
-  height: 100%;
-}
-</style>

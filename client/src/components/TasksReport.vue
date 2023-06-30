@@ -2,7 +2,7 @@
     <div class="section">
       <div class="container">
         <div class="is-multiline">
-          <div v-for="(tasks, user) in taskReportList" :key="user">
+          <div v-for="(tasks, user) in taskReport" :key="user">
             <div class="card mb-4 has-background-info-light">
               <header class="card-header">
                 <p class="card-header-title">{{ user }}</p>
@@ -33,8 +33,8 @@
 <script setup>
 
 defineProps({
-    taskReportList: {
-        type: [],
+    taskReport: {
+        type: Object,
         required: true,
     },
 })

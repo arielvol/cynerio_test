@@ -1,10 +1,10 @@
 <template>
     <div class="container is-fluid">
-        <form @submit.prevent="onSubmitUser" class="box">
+        <form @submit.prevent="onSubmitUser" class="box mt-5">
             <div class="field">
                 <label class="label">Create User Form:</label>
                 <div class="control">
-                    <input class="input" type="text" placeholder="Enter username" v-model="userName" required>
+                    <input class="input" type="text" placeholder="Enter user name" v-model="userName" required>
                 </div>
             </div>
             <div class="field">
@@ -24,7 +24,7 @@
                     <button class="delete" aria-label="close" @click="isShowTasksReportModal = false"></button>
                 </header>
                 <section class="modal-card-body">
-                    <TasksReport :task-report-list="tasksReportList" />
+                    <TasksReport :task-report="tasksReport" />
                 </section>
             </div>
         </div>
@@ -40,11 +40,15 @@ import UserCard from './UserCard.vue';
 import TasksReport from './TasksReport.vue';
 import UserService from '../services/UserService';
 import TaskService from '../services/TaskService';
+import { createErrorMessage } from '../utils/utils';
+
+import toastr from 'toastr';
+import 'toastr/toastr.scss';
 
 let usersList = ref([]);
 let userName = ref("");
 let isShowTasksReportModal = ref(false)
-let tasksReportList = ref([]);
+let tasksReport = ref({});
 
 onMounted(async () => {
     try {
@@ -52,7 +56,8 @@ onMounted(async () => {
         usersList.value = response.data.sort((a, b) => a.name.localeCompare(b.name));
     }
     catch (error) {
-        console.error(error);
+        const msg = createErrorMessage(error);
+        toastr.error(msg, 'Error fetching users');
     }
 })
 
@@ -63,17 +68,19 @@ const onSubmitUser = async () => {
         userName.value = "";
     }
     catch (error) {
-        console.error(error);
+        const msg = createErrorMessage(error);
+        toastr.error(msg, 'Error Creating User');
     }
 }
 
 const onCreateTaskReportClicked = async () => {
     try {
         const response = await TaskService.createTaskReport();
-        tasksReportList.value = response.data;
+        tasksReport.value = response.data;
         isShowTasksReportModal.value = true;
     } catch (error) {
-        console.error(error);
+        const msg = createErrorMessage(error);
+        toastr.error(msg, 'Error creating Task Report');
     }
 }
 
