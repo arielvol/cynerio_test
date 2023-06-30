@@ -47,5 +47,6 @@ npm run dev
 http://localhost:5173/
 
 
+## Unit Tests:
 
-
+All of the server unit tests are located under app/tests/
