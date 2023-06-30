@@ -1,7 +1,7 @@
 from datetime import datetime
 from app import db
 from app.models.task import Task
-from constants import CHECK_IN, CHECK_OUT, MSG_TASK_ID_REQUIRED, MSG_TASK_ID_DOES_NOT_EXIST, MSG_TASK_ALREADY_CHECKED_OUT, MSG_NO_ACTIVE_TASK_EVENT, MSG_TASK_CHECKED_OUT_SUCCESSFULLY
+from constants import CHECK_IN, CHECK_OUT, MSG_TASK_ID_REQUIRED, MSG_TASK_ID_DOES_NOT_EXIST, MSG_TASK_ALREADY_CHECKED_OUT, MSG_NO_ACTIVE_TASK_EVENT
 from app.app_urls import URL_TASK_CHECK_OUT
 from app.models.task_event import TaskEvent
 from .base import BaseTestCase
@@ -51,4 +51,4 @@ class CheckOutResourceTestCase(BaseTestCase):
 
             response = self.client.post(URL_TASK_CHECK_OUT, json={'task_id': task.id})
             self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.get_json()['message'], MSG_TASK_CHECKED_OUT_SUCCESSFULLY.format(task.name))
+            self.assertEqual(response.get_json()['task']['name'],task.name)

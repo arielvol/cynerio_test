@@ -2,7 +2,7 @@ import json
 
 from app.app_urls import URL_USER_TASK, URL_TASK
 from .base import BaseTestCase
-from constants import MSG_TASK_WAS_CREATED_SUCCESSFULLY, MSG_TASK_ALREADY_EXISTS, MSG_USER_NOT_FOUND, MSG_TASK_NAME_REQUIRED, MSG_USER_ID_REQUIRED
+from constants import MSG_TASK_ALREADY_EXISTS, MSG_USER_NOT_FOUND, MSG_TASK_NAME_REQUIRED, MSG_USER_ID_REQUIRED, CHECK_OUT
 
 class TaskResourceTestCase(BaseTestCase):
 
@@ -20,7 +20,7 @@ class TaskResourceTestCase(BaseTestCase):
 
     def test_post_no_user_id(self):
         task_data = {
-            'name': "Task1",
+            'task_name': "Task1",
         }
         response = self.client.post(URL_TASK, data=json.dumps(task_data), content_type='application/json')
         self.assertEqual(response.status_code, 400)
@@ -29,7 +29,6 @@ class TaskResourceTestCase(BaseTestCase):
 
     def test_get_user_tasks(self):
         with self.app.app_context():
-            #user1 = User.query.get(self.user1_id)
 
             response = self.client.get(f'{URL_USER_TASK}/{self.user1_id}')
             data = json.loads(response.data.decode())
@@ -51,7 +50,7 @@ class TaskResourceTestCase(BaseTestCase):
 
         test_task_name = 'Test Task 1'
         task_data = {
-            'name': test_task_name,
+            'task_name': test_task_name,
             'user_id': self.user1_id
         }
 
@@ -59,12 +58,13 @@ class TaskResourceTestCase(BaseTestCase):
         data = json.loads(response.data.decode())
 
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(data['message'], MSG_TASK_WAS_CREATED_SUCCESSFULLY.format(test_task_name))
+        self.assertEqual(data['name'], test_task_name)
+        self.assertEqual(data['status'], CHECK_OUT)
 
     def test_post_existing_task(self):
 
         existing_task_data = {
-            'name': 'Task1',
+            'task_name': 'Task1',
             'user_id': self.user1_id
         }
 
@@ -72,4 +72,4 @@ class TaskResourceTestCase(BaseTestCase):
         data = json.loads(response.data.decode())
 
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(data['message'], MSG_TASK_ALREADY_EXISTS.format(existing_task_data['name']))
+        self.assertEqual(data['message'], MSG_TASK_ALREADY_EXISTS.format(existing_task_data['task_name']))

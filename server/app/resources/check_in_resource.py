@@ -1,10 +1,10 @@
 from app import db
-from flask import request
+from flask import request, jsonify
 from flask_restful import Resource
 from app.models.task import Task
 from app.models.user import User
 from app.models.task_event import TaskEvent
-from constants import MSG_TASK_CHECKED_IN_SUCCESSFULLY, CHECK_IN, MSG_TASK_ID_REQUIRED, MSG_TASK_ID_DOES_NOT_EXIST, MSG_TASK_ALREADY_CHECKED_IN, MSG_USER_ALREADY_CHECKED_IN
+from constants import CHECK_IN, MSG_TASK_ID_REQUIRED, MSG_TASK_ID_DOES_NOT_EXIST, MSG_TASK_ALREADY_CHECKED_IN, MSG_USER_ALREADY_CHECKED_IN
 
 class CheckInResource(Resource):
     def post(self):
@@ -34,4 +34,4 @@ class CheckInResource(Resource):
         new_event = TaskEvent(task_id=task.id)
         db.session.add(new_event)
         db.session.commit()
-        return {'message': MSG_TASK_CHECKED_IN_SUCCESSFULLY.format(task.name)}, 200
+        return { "task": {"id": task.id, "name": task.name, "status": task.status} , "task_event": new_event.to_dict()}, 200

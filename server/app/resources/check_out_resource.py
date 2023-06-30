@@ -4,7 +4,7 @@ from flask_restful import Resource
 from app.models.task import Task
 from app.models.task_event import TaskEvent
 from datetime import datetime
-from constants import CHECK_OUT, MSG_TASK_ID_REQUIRED, MSG_TASK_ID_DOES_NOT_EXIST, MSG_TASK_ALREADY_CHECKED_OUT, MSG_NO_ACTIVE_TASK_EVENT, MSG_TASK_CHECKED_OUT_SUCCESSFULLY
+from constants import CHECK_OUT, MSG_TASK_ID_REQUIRED, MSG_TASK_ID_DOES_NOT_EXIST, MSG_TASK_ALREADY_CHECKED_OUT, MSG_NO_ACTIVE_TASK_EVENT
 
 class CheckoutResource(Resource):
     def post(self):
@@ -29,4 +29,4 @@ class CheckoutResource(Resource):
 
         active_event.checkout_time = datetime.utcnow()
         db.session.commit()
-        return {'message': MSG_TASK_CHECKED_OUT_SUCCESSFULLY.format(task.name)}, 200
+        return { "task": {"id": task.id, "name": task.name, "status": task.status} , "task_event": active_event.to_dict()}, 200
